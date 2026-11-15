@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Installs and configures HAProxy load balancer
+apt-get update -y
+apt-get install -y haproxy
+cat << 'EOT' >> /etc/haproxy/haproxy.cfg
+
+frontend haproxy_node
+    bind *:80
+    mode http
+    default_backend web_servers
+
+backend web_servers
+    mode http
+    balance roundrobin
+    server 7309-web-01 35.178.114.160:80 check
+    server 7309-web-02 34.244.156.40:80 check
+EOT
+service haproxy restart
