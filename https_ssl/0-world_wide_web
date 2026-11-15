@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Audits domain and subdomains using dig and awk
+# shellcheck disable=SC2086
+domain=$1
+subdomain=$2
+
+audit_record() {
+    sub=$1
+    target_query="${sub}.${domain}"
+    if [ -z "$sub" ]; then
+        target_query="${domain}"
+        sub="www"
+    fi
+    
+    result=$(dig +noall +answer ${target_query} | awk '$4 == "A" {print $4, $5}')
+    if [ -n "$result" ]; then
+        rec_type=$(echo "$result" | awk '{print $1}')
+        dest=$(echo "$result" | awk '{print $2}')
+        echo "The subdomain ${sub} is a ${rec_type} record and points to ${dest}"
+    fi
+}
+
+if [ -n "$subdomain" ]; then
+    audit_record "$subdomain"
+else
+    audit_record "www"
+    audit_record "lb-01"
+    audit_record "web-01"
+    audit_record "web-02"
+fi
