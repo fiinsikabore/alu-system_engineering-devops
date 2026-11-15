@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs nginx on port 80 and serves a page with a custom string
+# Installs nginx on port 80 and serves a page containing Holberton School
 apt-get update -y
 apt-get install -y nginx
 echo "Holberton School for the win!" > /var/www/html/index.html
