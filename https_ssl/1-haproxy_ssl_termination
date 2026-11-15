@@ -1,0 +1,29 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    user haproxy
+    group haproxy
+    daemon
+    maxconn 256
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+frontend www_frontend
+    bind *:80
+    bind *:443 ssl crt /etc/ssl/certs/fiinsikabore.tech.pem
+    mode http
+    default_backend www_backend
+
+backend www_backend
+    mode http
+    balance roundrobin
+    server web-01 35.178.114.160:80 check
+    server web-02 34.244.156.40:80 check
