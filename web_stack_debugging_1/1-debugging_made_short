@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fixes Nginx to listen on port 80 in a short way
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Makes Nginx listen on port 80 then kills its master so service says it is not running
+sed -i 's/8080/80/' /etc/nginx/sites-available/default | ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 service nginx restart
-kill "$(pgrep 'nginx' | head -1)"
+kill -9 "$(cat /run/nginx.pid)"
