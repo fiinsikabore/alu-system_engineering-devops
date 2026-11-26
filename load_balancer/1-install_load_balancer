@@ -15,8 +15,8 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server 7309-web-01 35.178.114.160:80 check
-    server 7309-web-02 13.40.175.187:80 check
+        server 7309-web-01 13.40.72.99:80 check
+    server 7309-web-02 18.171.250.120:80 check
 EOF
 
 service haproxy restart
